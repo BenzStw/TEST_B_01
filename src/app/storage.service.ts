@@ -16,7 +16,7 @@ export class StorageService {
 
   setItem(key: string, value: string): void {
     if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.setItem(key, value); 
+      localStorage.setItem(key, value);
     }
   }
 }
