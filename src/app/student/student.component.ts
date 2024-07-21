@@ -3,6 +3,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {FormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {StorageService} from "../storage.service";
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-student',
@@ -40,13 +41,29 @@ export class StudentComponent implements OnInit{
     }
   }
 
-  onDeleteStudent(data: studentModel){
-    const isConfirm = confirm('Are you sure you want to delete this student?');
-    if (isConfirm) {
-      const currentStudent = this.studentList.findIndex(s => s.id === this.studentObj.id);
-      this.studentList.splice(currentStudent, 1);
-      this.storageService.setItem('studentData', JSON.stringify(this.studentList));
-    }
+  onDeleteStudent(data: studentModel) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to delete this student's information?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const currentStudent = this.studentList.findIndex(s => s.id === data.id);
+        this.studentList.splice(currentStudent, 1);
+        this.storageService.setItem('studentData', JSON.stringify(this.studentList));
+
+        Swal.fire(
+          'Deleted!',
+          'The student information has been deleted.',
+          'success'
+        );
+      }
+    });
   }
 
   onSaveForm() {
